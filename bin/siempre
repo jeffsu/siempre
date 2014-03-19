@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+if (process.argv.length == 3) {
+  require('../lib/app')
+} else {
+  console.log("Usage: siempre [config-file]")
+}

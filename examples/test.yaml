@@ -1,0 +1,6 @@
+# ./bin/siempre ./examples/test.yaml
+port: 5000
+processes:
+  foo:
+    silent:  true
+    command: [ "node", "./examples/foo.js" ] 

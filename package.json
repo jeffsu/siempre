@@ -1,0 +1,40 @@
+{
+  "name": "siempre",
+  "version": "0.0.1-alpha",
+  "description": "Dashboard for forever",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jeffsu/siempre"
+  },
+  "keywords": [
+    "forever",
+    "dashboard",
+    "processes",
+    "monitor"
+  ],
+  "author": "Jeff Su",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeffsu/siempre/issues"
+  },
+  "homepage": "https://github.com/jeffsu/siempre",
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "grunt": "^0.4.4",
+    "grunt-contrib-coffee": "^0.10.1",
+    "grunt-coffeeify": "^0.1.3",
+    "grunt-contrib-watch": "^0.6.0",
+    "grunt-contrib-less": "^0.10.0"
+  },
+  "dependencies": {
+    "express": "^3.4.8",
+    "jade": "^1.3.0",
+    "forever-monitor": "^1.2.3",
+    "js-yaml": "^3.0.2",
+    "socket.io": "^0.9.16"
+  }
+}

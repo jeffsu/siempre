@@ -1,0 +1,16 @@
+extends ./layout
+
+block content
+  style.
+    .out { overflow: auto; height: 50% }
+    .err { overflow: auto; height: 30% }
+
+  h2.name= name
+  h5 STDOUT
+  pre.out
+  h5 STDERR
+  pre.err
+
+block script
+  script(src="/socket.io/socket.io.js")
+  script(src="/js/tail.js")

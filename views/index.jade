@@ -1,0 +1,31 @@
+extends ./layout
+
+block content
+  table.table.table-striped
+    thead
+      tr
+        th Name
+        th PID
+        th Last Error
+        th Status
+        th
+
+    each child, name in controller.processes
+      - var data = child ? child.data : {}
+      tr
+        td= name
+        td= data.pid
+        td= controller.errors[name]
+        if data.running
+          td Running
+          td
+            .btn-group
+              button.btn-xs.btn.btn-danger.stop(data-name=name) Stop
+              a.btn-xs.btn.btn-success(href="/processes/#{name}/tail") Tail
+        else
+          td Stopped
+          td
+            button.btn-xs.btn.btn-primary.start(data-name=name) Start
+
+block script
+  script(src="/js/main.js")
