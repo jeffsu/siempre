@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git://github.com/jeffsu/siempre"
   },
-  "bin": {
-    { "siempre": "./bin/siempre" }
+  "bin": { 
+    "siempre": "./bin/siempre"
   },
   "keywords": [
     "forever",
