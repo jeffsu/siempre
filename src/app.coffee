@@ -26,6 +26,7 @@ process.env.NODE_ENV = 'development'
 app.use(express.methodOverride())
 app.use(express.logger())
 app.set('view engine', 'jade')
+app.set('views', path.join(__dirname, '..', 'views'))
 
 app.use(express.static(__dirname + '/../public'))
 app.use(express.errorHandler({ showStack: true, dumpExceptions: true }))
