@@ -1,4 +1,5 @@
 {Monitor} = require 'forever-monitor'
+
 DEFAULTS =
   killTree: true
 
@@ -10,13 +11,13 @@ class Controller
     @errors    = {}
 
   stop: (name) ->
-    @processes[name]?.stop()
+    @processes[name]?.monitor.stop()
 
   start: (name) ->
-    @processes[name]?.start()
+    @processes[name]?.monitor.start()
 
   restart: (name) ->
-    @processes[name]?.restart()
+    @processes[name]?.monitor.restart()
 
   getProcess: (name) ->
     @processes[name]
@@ -31,14 +32,30 @@ class Controller
     errors = @errors
 
     for name, options of @config.processes
-      do (name, options) =>
-        child = @processes[name] = @createProcess(name, options)
-        child.on 'error', (err) -> errors[name] = err
-
-        unless options.disabled
-          child.start()
+      proc = @processes[name] = @createProcess(name, options)
+      proc.monitor.start() unless options.disabled
 
   createProcess: (name, options) ->
+    monitor = @createMonitor(name, options)
+    process =
+      monitor:   monitor
+      name:      name
+      startTime: null
+      stopTime:  null
+      error:     null
+
+    monitor.on 'error', (err) -> process.error = err
+    monitor.on 'stop',  ->
+      process.startTime = null
+      process.stopTime  = Date.now()
+
+    monitor.on 'start', ->
+      process.stopTime  = null
+      process.startTime = Date.now()
+
+    return process
+
+  createMonitor: (name, options) ->
     {command} = options
     options.uid ?= name
 

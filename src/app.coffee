@@ -5,6 +5,9 @@ http    = require 'http'
 server  = http.createServer(app)
 io      = require('socket.io').listen(server)
 
+app.locals.moment = require 'moment'
+app.locals.os     = require 'os'
+
 TAIL_TIMEOUT = 10000
 
 parser     = require './config-parser'
@@ -12,6 +15,8 @@ Controller = require './controller'
 
 configFile = process.argv[2] || {}
 config     = parser.parse(configFile)
+
+config.port ||= 5000
 
 controller = new Controller(config)
 controller.startAll()
@@ -43,7 +48,6 @@ app.post '/processes/:name/restart', (req, res) ->
   controller.restart(name)
   res.json({})
 
-
 app.get '/processes/:name/tail', (req, res) ->
   {name} = req.params
   res.render('tail', { name: name })
@@ -53,11 +57,11 @@ io.sockets.on 'connection', (socket) ->
   socket.on 'tail', (data) ->
 
     {name} = data
-    proc = controller.getProcess(name)
-    return unless proc
+    monitor = controller.getProcess(name)?.monitor
+    return unless monitor
 
-    out = (o) -> socket.emit 'out', o.toString()
-    err = (o) -> socket.emit 'err', o.toString()
+    onOut = (o) -> socket.emit 'out', o.toString()
+    onErr = (o) -> socket.emit 'err', o.toString()
 
     disconnected = false
 
@@ -67,15 +71,14 @@ io.sockets.on 'connection', (socket) ->
       clearTimeout(id)
       disconnected = true
 
-      proc.removeListener 'stdout', out
-      proc.removeListener 'stderr', err
-      out = err = null
+      monitor.removeListener 'stdout', onOut
+      monitor.removeListener 'stderr', onErr
+      onOut = onErr = null
 
     id = setTimeout disconnect, TAIL_TIMEOUT
 
-    proc.on 'stdout', out
-    proc.on 'stderr', err
+    monitor.on 'stdout', onOut
+    monitor.on 'stderr', onErr
     socket.on 'disconnect', disconnect
 
-
-server.listen(config.port || 5000)
+server.listen(config.port)

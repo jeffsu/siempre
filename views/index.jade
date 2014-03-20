@@ -6,15 +6,19 @@ block content
       tr
         th Name
         th PID
+        th Started
+        th Stopped
         th Last Error
         th Status
         th
 
-    each child, name in controller.processes
-      - var data = child ? child.data : {}
+    each proc, name in controller.processes
+      - var data = proc.monitor.data
       tr
         td= name
         td= data.pid
+        td= proc.startTime ? moment(proc.startTime).fromNow() : '---'
+        td= proc.stopTime  ? moment(proc.stopTime).fromNow() : '---'
         td= controller.errors[name]
         if data.running
           td Running

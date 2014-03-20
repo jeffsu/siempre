@@ -10,6 +10,16 @@ body
     .container
       .navbar-header
         a.navbar-brand(href="/") Siempre
+      - var load = os.loadavg()
+      - var cpus = os.cpus()
+      - var GB   = 1073741824
+      .navbar-collapse.collapse
+        ul.nav.navbar-nav
+          li: a= "CPUs: " + cpus.length
+          li: a= "Load: " + load.map(function (l) { return l.toFixed(2) }).join(' ')
+          li: a
+            = "Memory: " + (os.freemem()/GB).toFixed(1) + "GB of " + (os.totalmem()/GB).toFixed(1) + "GB used"
+
   .container
     block content
   block script

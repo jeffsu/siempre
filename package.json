@@ -1,6 +1,6 @@
 {
   "name": "siempre",
-  "version": "0.0.1-alpha3",
+  "version": "0.0.1-alpha4",
   "description": "Dashboard for forever",
   "main": "index.js",
   "scripts": {
@@ -42,6 +42,7 @@
     "forever-monitor": "^1.2.3",
     "js-yaml": "^3.0.2",
     "socket.io": "^0.9.16",
-    "async": "^0.2.10"
+    "async": "^0.2.10",
+    "moment": "^2.5.1"
   }
 }
