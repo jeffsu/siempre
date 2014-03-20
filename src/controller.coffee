@@ -29,9 +29,9 @@ class Controller
     psTree(pid, cb)
 
   stopAll: ->
-    for name, forever of @processes
-      if forever.running
-        forever.stop()
+    for name, proc of @processes
+      if proc.monitor.running
+        proc.monitor.stop()
 
   startAll: ->
     return unless @config.processes?
