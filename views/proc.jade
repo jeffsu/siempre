@@ -1,0 +1,30 @@
+extends ./layout
+
+block content
+  style.
+    .out { overflow: auto; height: 30% }
+    .err { overflow: auto; height: 20% }
+
+  h2.name= name
+  table.table.table-bordered.table-condensed
+    - var data = proc.monitor.data
+    tr
+      td.text-right PID
+      td= data.pid
+      td.text-right # Children
+      td= children.length
+    tr
+      td.text-right Started
+      td= moment(proc.startTime).fromNow()
+      td.text-right Stopped
+      td= moment(proc.stopTime).fromNow()
+
+
+  h5 STDOUT
+  pre.out
+  h5 STDERR
+  pre.err
+
+block script
+  script(src="/socket.io/socket.io.js")
+  script(src="/js/tail.js")

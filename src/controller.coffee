@@ -1,4 +1,5 @@
 {Monitor} = require 'forever-monitor'
+psTree    = require 'ps-tree'
 
 DEFAULTS =
   killTree: true
@@ -22,6 +23,11 @@ class Controller
   getProcess: (name) ->
     @processes[name]
 
+  getTree: (name, cb) ->
+    pid = @processes[name]?.monitor.data.pid
+    return cb("Process '#{name}' does not exist", null) unless pid
+    psTree(pid, cb)
+
   stopAll: ->
     for name, forever of @processes
       if forever.running
@@ -37,23 +43,23 @@ class Controller
 
   createProcess: (name, options) ->
     monitor = @createMonitor(name, options)
-    process =
+    proc =
       monitor:   monitor
       name:      name
       startTime: null
       stopTime:  null
       error:     null
 
-    monitor.on 'error', (err) -> process.error = err
+    monitor.on 'error', (err) -> proc.error = err
     monitor.on 'stop',  ->
-      process.startTime = null
-      process.stopTime  = Date.now()
+      proc.startTime = null
+      proc.stopTime  = Date.now()
 
     monitor.on 'start', ->
-      process.stopTime  = null
-      process.startTime = Date.now()
+      proc.stopTime  = null
+      proc.startTime = Date.now()
 
-    return process
+    return proc
 
   createMonitor: (name, options) ->
     {command} = options

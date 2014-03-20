@@ -48,10 +48,12 @@ app.post '/processes/:name/restart', (req, res) ->
   controller.restart(name)
   res.json({})
 
-app.get '/processes/:name/tail', (req, res) ->
+app.get '/processes/:name', (req, res, next) ->
   {name} = req.params
-  res.render('tail', { name: name })
+  controller.getTree name, (err, children) ->
+    return next(err) if err
 
+    res.render('proc', { name: name, proc: controller.getProcess(name), children: children })
 
 io.sockets.on 'connection', (socket) ->
   socket.on 'tail', (data) ->
