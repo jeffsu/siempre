@@ -1,6 +1,6 @@
 {
   "name": "siempre",
-  "version": "0.0.1-alpha7",
+  "version": "0.0.1-alpha8",
   "description": "Dashboard for forever",
   "main": "index.js",
   "scripts": {
