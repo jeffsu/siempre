@@ -1,8 +1,7 @@
 {Monitor} = require 'forever-monitor'
 psTree    = require 'ps-tree'
 
-DEFAULTS =
-  killTree: true
+DEFAULTS = {}
 
 class Controller
   # TODO make this more robust

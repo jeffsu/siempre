@@ -8,5 +8,7 @@ processes:
 
   helloEnabled:
     disabled: false
+    killTree: true
+    killSignal: 'SIGINT'
     silent:   true
     command:  [ "node", "./examples/hello.js" ] 
