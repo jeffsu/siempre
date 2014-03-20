@@ -21,6 +21,11 @@ class Controller
   getProcess: (name) ->
     @processes[name]
 
+  stopAll: ->
+    for name, forever of @processes
+      if forever.running
+        forever.stop()
+
   startAll: ->
     return unless @config.processes?
     errors = @errors
@@ -30,7 +35,7 @@ class Controller
         child = @processes[name] = @createProcess(name, options)
         child.on 'error', (err) -> errors[name] = err
 
-        unless options.disabled?
+        unless options.disabled
           child.start()
 
   createProcess: (name, options) ->
