@@ -1,5 +1,6 @@
 {Monitor} = require 'forever-monitor'
 psTree    = require 'ps-tree'
+require './kill'
 
 DEFAULTS = {}
 
