@@ -1,3 +1,4 @@
+fs        = require 'fs'
 {Monitor} = require 'forever-monitor'
 psTree    = require 'ps-tree'
 require './kill'
@@ -41,8 +42,28 @@ class Controller
       proc = @processes[name] = @createProcess(name, options)
       proc.monitor.start() unless options.disabled
 
+  attachLogs: (monitor, outFile, errFile) ->
+    flags = if monitor.append then 'a+' else 'w+'
+    options = { flags, encoding: 'utf8', mode: "0644" }
+
+    if outFile
+      out = fs.createWriteStream outFile, options
+
+    if errFile
+      err = fs.createWriteStream errFile, options
+
+    return [ out, err ]
+    
+
   createProcess: (name, options) ->
+
+    {outFile, errFile} = options
+
+    delete options.outFile
+    delete options.errFile
+
     monitor = @createMonitor(name, options)
+
     proc =
       monitor:   monitor
       name:      name
@@ -58,6 +79,17 @@ class Controller
     monitor.on 'start', ->
       proc.stopTime  = null
       proc.startTime = Date.now()
+
+    [out, err] = @attachLogs(monitor, outFile, errFile)
+
+    if out
+      monitor.on 'stdout', (data) -> out.write(data)
+
+    if err
+      monitor.on 'stderr', (data) -> err.write(data)
+
+    proc.out = out
+    proc.err = err
 
     return proc
 
