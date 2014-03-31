@@ -1,7 +1,7 @@
 psTree   = require 'ps-tree'
 common   = require 'forever-monitor/lib/forever-monitor/common'
 async    = require 'async'
-TIMEOUT  = 1000
+TIMEOUT  = 60000
 
 
 killTree = (pid, signal, timeout, done) ->
