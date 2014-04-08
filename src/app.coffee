@@ -34,6 +34,21 @@ app.use(express.errorHandler({ showStack: true, dumpExceptions: true }))
 app.get '/', (req, res) ->
   res.render('index', { controller: controller })
 
+app.get '/status.json', (req, res) ->
+  ret = { processes: {} }
+
+  for name, proc of controller.processes
+    running = !!proc.monitor.data?.running
+
+    ret.processes[name] =
+      pid:       proc.pid
+      startTime: proc.startTime
+      stopTime:  proc.stopTime
+      errors:    controller.errors[name]
+      isRunning: running
+
+  res.json(ret)
+
 app.post '/processes/:name/stop', (req, res) ->
   {name} = req.params
   controller.stop(name)
