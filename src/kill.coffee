@@ -6,15 +6,19 @@ TIMEOUT  = 60000
 
 killTree = (pid, signal, timeout, done) ->
   psTree pid, (err, children) ->
+    return done(err) if err
+
     pids = children.map (c) -> c.PID
     kill = (pid, cb) -> killProcess(pid, signal, timeout, cb)
 
     async.series [
-      (cb) -> async.each pids, kill, cb
+      (cb) -> async.each(pids, kill, cb)
       (cb) -> kill(pid, cb)
     ], done
 
 killProcess = (pid, signal, timeout, cb) ->
+  return cb() unless common.checkProcess(pid)
+
   process.kill(pid, signal)
   start = Date.now()
   test  = ->
