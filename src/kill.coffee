@@ -15,7 +15,12 @@ killTree = (pid, signal, timeout, done) ->
     ], done
 
 killProcess = (pid, signal, timeout, cb) ->
-  process.kill(pid, signal)
+  try
+    process.kill(pid, signal)
+  catch e
+    console.log "failed to kill #{pid}:", e
+    cb null
+
   start = Date.now()
   test  = ->
     running  = isRunning(pid)

@@ -1,1 +1,1 @@
-setInterval(function () { console.log("child") }, 1000)
+setInterval(function () { console.log("child") }, 1000);
