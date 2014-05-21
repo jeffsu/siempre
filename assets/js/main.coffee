@@ -12,3 +12,8 @@ $ ->
     $.post "/processes/#{name}/start", (data) ->
       setTimeout (-> location.reload()), 2000
 
+  $('.restart').click ->
+    name = $(this).data('name')
+    $(this).html('Restarting...').addClass('btn-default').removeClass('btn-warning')
+    $.post "/processes/#{name}/restart", (data) ->
+      setTimeout (-> location.reload()), 2000

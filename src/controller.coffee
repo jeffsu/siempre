@@ -76,9 +76,12 @@ class Controller
       proc.startTime = null
       proc.stopTime  = Date.now()
 
-    monitor.on 'start', ->
+    startProc = ->
       proc.stopTime  = null
       proc.startTime = Date.now()
+
+    monitor.on 'start',   startProc
+    monitor.on 'restart', startProc
 
     [out, err] = @attachLogs(monitor, outFile, errFile)
 

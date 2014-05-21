@@ -24,8 +24,9 @@ block content
           td Running
           td
             .btn-group
-              button.btn-xs.btn.btn-danger.stop(data-name=name) Stop
               a.btn-xs.btn.btn-success(href="/processes/#{name}") Information
+              button.btn-xs.btn.btn-warning.restart(data-name=name) Restart
+              button.btn-xs.btn.btn-danger.stop(data-name=name) Stop
         else
           td Stopped
           td

@@ -2,7 +2,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-less')
-  grunt.registerTask('default', [ 'coffee:glob_to_multiple' ])
+  grunt.registerTask('default', [ 'coffee:glob_to_multiple', 'coffee:compile' ])
 
   grunt.initConfig
     watch:
