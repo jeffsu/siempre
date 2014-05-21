@@ -19,7 +19,7 @@ block content
         td= data.pid
         td= proc.startTime ? moment(proc.startTime).fromNow() : '---'
         td= proc.stopTime  ? moment(proc.stopTime).fromNow() : '---'
-        td= controller.errors[name]
+        td= proc.error
         if data.running
           td Running
           td

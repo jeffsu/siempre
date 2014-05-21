@@ -10,7 +10,6 @@ class Controller
   # file, json or Object
   constructor: (@config) ->
     @processes = Object.create(null)
-    @errors    = {}
 
   stop: (name) ->
     @processes[name]?.monitor.stop()
@@ -36,7 +35,6 @@ class Controller
 
   startAll: ->
     return unless @config.processes?
-    errors = @errors
 
     for name, options of @config.processes
       proc = @processes[name] = @createProcess(name, options)
@@ -82,11 +80,14 @@ class Controller
 
     [out, err] = @attachLogs(monitor, outFile, errFile)
 
-    if out
-      monitor.on 'stdout', (data) -> out.write(data)
+    monitor.on 'stdout', (data) ->
+      out.write(data) if out
 
-    if err
-      monitor.on 'stderr', (data) -> err.write(data)
+    monitor.on 'stderr', (data) ->
+      error = data.toString()
+      console.log proc.name, "error:", error
+      proc.error = error
+      err.write(data) if err
 
     proc.out = out
     proc.err = err

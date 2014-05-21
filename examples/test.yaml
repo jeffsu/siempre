@@ -2,13 +2,15 @@
 port: 5000
 processes:
   helloDisabled:
-    outFile:  "/home/jeffsu/workspace/siempre/out.log"
+    outFile:  "./out.log"
+    errFile:  "./err.log"
     disabled: true
     silent:   true
     command:  [ "node", "./examples/hello.js" ] 
 
   helloEnabled:
     outFile:  "./out.log"
+    errFile:  "./error.log"
     disabled: false
     killTree: true
     killSignal: 'SIGINT'
