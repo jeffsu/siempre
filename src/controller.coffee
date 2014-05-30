@@ -1,6 +1,6 @@
-fs        = require 'fs'
-{Monitor} = require 'forever-monitor'
-psTree    = require 'ps-tree'
+fs      = require 'fs'
+Monitor = require './monitor'
+psTree  = require 'ps-tree'
 require './kill'
 
 DEFAULTS = {}
