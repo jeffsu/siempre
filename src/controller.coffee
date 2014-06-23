@@ -3,7 +3,8 @@ Monitor = require './monitor'
 psTree  = require 'ps-tree'
 require './kill'
 
-DEFAULTS = {}
+DEFAULTS =
+  killSignal: 'SIGTERM'
 
 class Controller
   # TODO make this more robust
@@ -12,14 +13,14 @@ class Controller
     @processes = Object.create(null)
     @errors    = {}
 
-  stop: (name) ->
-    @processes[name]?.monitor.stop()
+  stop: (name, cb) ->
+    @processes[name]?.monitor.stop(cb)
 
-  start: (name) ->
-    @processes[name]?.monitor.start()
+  start: (name, cb) ->
+    @processes[name]?.monitor.start(cb)
 
-  restart: (name) ->
-    @processes[name]?.monitor.restart()
+  restart: (name, cb) ->
+    @processes[name]?.monitor.restart(cb)
 
   getProcess: (name) ->
     @processes[name]
@@ -53,7 +54,7 @@ class Controller
       err = fs.createWriteStream errFile, options
 
     return [ out, err ]
-    
+
 
   createProcess: (name, options) ->
 

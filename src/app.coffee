@@ -49,20 +49,22 @@ app.get '/status.json', (req, res) ->
 
   res.json(ret)
 
-app.post '/processes/:name/stop', (req, res) ->
+app.post '/processes/:name/stop', (req, res, next) ->
   {name} = req.params
-  controller.stop(name)
-  res.json({})
+  controller.stop name, (err) ->
+    return next(err) if err
+    res.json({})
 
 app.post '/processes/:name/start', (req, res) ->
   {name} = req.params
   controller.start(name)
   res.json({})
 
-app.post '/processes/:name/restart', (req, res) ->
+app.post '/processes/:name/restart', (req, res, next) ->
   {name} = req.params
-  controller.restart(name)
-  res.json({})
+  controller.restart name, (err) ->
+    return next(err) if err
+    res.json({})
 
 app.get '/processes/:name', (req, res, next) ->
   {name} = req.params

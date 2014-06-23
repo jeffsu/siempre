@@ -1,7 +1,9 @@
 psTree   = require 'ps-tree'
 common   = require 'forever-monitor/lib/forever-monitor/common'
 async    = require 'async'
-TIMEOUT  = 60000
+TIMEOUT  = 5000
+WAIT     = 50
+SIGKILL  = 'SIGKILL'
 
 
 killTree = (pid, signal, timeout, done) ->
@@ -20,21 +22,30 @@ killProcess = (pid, signal, timeout, cb) ->
   return cb() unless common.checkProcess(pid)
 
   process.kill(pid, signal)
-  start = Date.now()
-  test  = ->
+  start    = Date.now()
+  running  = null
+  timedOut = null
+
+  test = ->
     running  = isRunning(pid)
-    timedOut = (timeout < (Date.now() - start))
+    timedOut = timeout < (Date.now() - start)
 
-    if !running
-      cb(null)
-    else if timedOut
-      cb(null, 'timedout')
+    if timedOut && running
+      return false
     else
-      setTimeout test, 50
- 
-  test()
+      return running
 
-  
+  fn = (cb) -> setTimeout(cb, WAIT)
+
+  async.whilst test, fn, (err) ->
+    return cb(err) if err
+
+    if running && signal != SIGKILL
+      process.kill(pid, SIGKILL)
+      setTimeout(cb, timeout)
+    else
+      cb(null, timedOut)
+
 isRunning = (pid) ->
   try
     running = process.kill(pid, 0)
@@ -47,5 +58,5 @@ common.kill = (pid, _killTree, signal, cb) ->
     killTree(pid, signal, TIMEOUT, cb)
   else
     killProcess(pid, signal, TIMEOUT, cb)
-  
-   
+
+

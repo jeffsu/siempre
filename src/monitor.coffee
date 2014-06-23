@@ -2,7 +2,18 @@
 
 common = require 'forever-monitor/lib/forever-monitor/common'
 
-Monitor::kill = (forceStop) ->
+# TODO
+# Monitor::start = (cb) ->
+
+Monitor::restart = (cb) ->
+  @forceRestart = true
+  @times = 0
+  @kill(false, cb)
+
+Monitor::stop = (cb) ->
+  @kill(true, cb)
+
+Monitor::kill = (forceStop, cb) ->
   self   = @
   child  = @child
   toKill = null
@@ -10,7 +21,12 @@ Monitor::kill = (forceStop) ->
 
   if !child || (!@running && !@forceRestart)
     process.nextTick ->
-      self.emit 'error', new Error('Cannot stop process that is not running')
+      err = new Error('Cannot stop process that is not running')
+      if cb
+        cb(err)
+      else
+        self.emit 'error', err
+
   else
     toKill = [@child.pid]
 
@@ -34,11 +50,13 @@ Monitor::kill = (forceStop) ->
     common.kill @child.pid, @killTree, @killSignal, ->
       if !self.running
         # temp hack b/c it's already started from child on exit
+
         if !self.forceRestart
           self.emit('stop', self.childData)
-
-        if self.forceRestart
+        else
           self.start(true)
+
+        cb()
 
   return @
 

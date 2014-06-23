@@ -5,7 +5,7 @@ processes:
     outFile:  "./out.log"
     disabled: true
     silent:   true
-    command:  [ "node", "./examples/hello.js" ] 
+    command:  [ "node", "./examples/hello.js" ]
 
   helloEnabled:
     outFile:  "./out.log"
@@ -13,4 +13,9 @@ processes:
     killTree: true
     killSignal: 'SIGINT'
     silent:   true
-    command:  [ "node", "./examples/hello.js" ] 
+    command:  [ "node", "./examples/hello.js" ]
+
+  long:
+    outFile: "./long.log"
+    disabled: false
+    command: ["node", "./examples/long.js"]
