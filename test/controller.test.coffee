@@ -51,8 +51,7 @@ describe "controller", (done) ->
 
       (cb) ->
         countRunning(controller).should.equal(2)
-        controller.stop('helloDisabled')
-        setTimeout cb, 100
+        controller.stop('helloDisabled', cb)
 
       (cb) ->
         countRunning(controller).should.equal(1)

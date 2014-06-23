@@ -17,5 +17,6 @@ processes:
 
   long:
     outFile: "./long.log"
-    disabled: false
+    disabled: true
     command: ["node", "./examples/long.js"]
+

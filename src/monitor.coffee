@@ -56,7 +56,7 @@ Monitor::kill = (forceStop, cb) ->
         else
           self.start(true)
 
-        cb()
+        cb() if cb
 
   return @
 
