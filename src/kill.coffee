@@ -1,8 +1,8 @@
 psTree   = require 'ps-tree'
 common   = require 'forever-monitor/lib/forever-monitor/common'
 async    = require 'async'
-TIMEOUT  = 5000
-WAIT     = 50
+TIMEOUT  = 20000
+WAIT     = 100
 SIGKILL  = 'SIGKILL'
 
 
