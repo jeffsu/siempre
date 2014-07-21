@@ -9,7 +9,7 @@ processes:
 
   helloEnabled:
     outFile:  "./out.log"
-    disabled: false
+    disabled: true
     killTree: true
     killSignal: 'SIGINT'
     silent:   true
@@ -19,4 +19,11 @@ processes:
     outFile: "./long.log"
     disabled: true
     command: ["node", "./examples/long.js"]
+
+  docker:
+    outFile: './docker.log'
+    silent:  true
+    command: ['node', './examples/child.js']
+    docker:
+      foo: 'bar'
 

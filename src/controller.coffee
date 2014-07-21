@@ -57,8 +57,7 @@ class Controller
 
 
   createProcess: (name, options) ->
-
-    {outFile, errFile} = options
+    { outFile, errFile } = options
 
     delete options.outFile
     delete options.errFile

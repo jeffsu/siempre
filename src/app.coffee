@@ -1,7 +1,11 @@
-express = require 'express'
-app     = express()
 path    = require 'path'
 http    = require 'http'
+express = require 'express'
+morgan  = require 'morgan'
+errorHandler   = require 'errorhandler'
+methodOverride = require 'method-override'
+
+app     = express()
 server  = http.createServer(app)
 io      = require('socket.io').listen(server)
 
@@ -15,7 +19,6 @@ Controller = require './controller'
 
 configFile = process.argv[2] || {}
 config     = parser.parse(configFile)
-
 config.port ||= 5000
 
 controller = new Controller(config)
@@ -23,13 +26,14 @@ controller.startAll()
 
 process.env.NODE_ENV = 'development'
 
-app.use(express.methodOverride())
-app.use(express.logger())
+
+app.use(methodOverride())
+app.use(morgan('combined'))
 app.set('view engine', 'jade')
 app.set('views', path.join(__dirname, '..', 'views'))
 
 app.use(express.static(__dirname + '/../public'))
-app.use(express.errorHandler({ showStack: true, dumpExceptions: true }))
+app.use(errorHandler())
 
 app.get '/', (req, res) ->
   res.render('index', { controller: controller })
