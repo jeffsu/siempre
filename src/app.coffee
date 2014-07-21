@@ -31,7 +31,6 @@ app.use(methodOverride())
 app.use(morgan('combined'))
 app.set('view engine', 'jade')
 app.set('views', path.join(__dirname, '..', 'views'))
-
 app.use(express.static(__dirname + '/../public'))
 app.use(errorHandler())
 
