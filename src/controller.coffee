@@ -28,7 +28,6 @@ class Controller
     @stopAll =>
       toStop = (name for name, opts of processes when opts.docker)
 
-      console.log toStop
       terminate = (err) ->
         console.warn(err) if err
         process.exit(if err then 1 else 0)
@@ -39,14 +38,12 @@ class Controller
   cleanDocker: (name, cb) ->
     @dockerCMD "stop", name, (err, stdout) =>
       if err
-        console.warn 'err', err
         cb()
       else
         @dockerCMD "rm", name, -> cb()
 
   dockerCMD: (cmd, name, cb) ->
     shell = "docker #{cmd} #{name}"
-    console.log shell
     exec shell, (err, stdout) ->
       if err
         cb(err)
@@ -179,10 +176,7 @@ class Controller
     command.push(image)
 
     Array::push.apply(command, oldcmd)
-
     options.command = command
-
-    console.log command.join(' ')
     return options
 
   createMonitor: (name, options) ->
