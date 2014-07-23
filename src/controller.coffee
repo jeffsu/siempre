@@ -170,6 +170,8 @@ class Controller
 
     if envs
       for envName, envVal of envs
+        envVal ?= process.env[envName]
+        continue unless envVal?
         command.push('-e')
         command.push("#{envName}=#{envVal}")
 
